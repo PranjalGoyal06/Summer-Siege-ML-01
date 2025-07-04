@@ -2,7 +2,10 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 import pandas as pd
 
-class CB513Dataset(Dataset):
+
+
+
+class PrepareCB513(Dataset):
     def __init__(self, csv_path, window_size=17):
         self.df = pd.read_csv(csv_path)
         self.window = window_size
@@ -18,14 +21,19 @@ class CB513Dataset(Dataset):
 
     def _prepare(self):
         for seq, ss, mask in zip(self.df['input'], self.df['dssp3'], self.df['cb513_mask']):
+            seq, ss = seq.strip().upper(), ss.strip().upper()
             mask = [float(m) for m in mask.strip().split()]
-            padded_seq = 'X'*self.half + seq + 'X'*self.half
+
+            if not (len(seq) == len(ss) == len(mask)): # corrupt rows
+                continue 
+
+            padded_seq = 'X' * self.half + seq + 'X' * self.half
 
             for i in range(len(seq)):
                 if mask[i] != 1.0:
                     continue
 
-                window = padded_seq[i:i+self.window]
+                window = padded_seq[i:i + self.window]
                 x = [self.aa_to_idx.get(aa, self.pad_idx) for aa in window]
                 y = self.ss_map[ss[i]]
                 self.samples.append((x, y))
@@ -37,10 +45,13 @@ class CB513Dataset(Dataset):
         x, y = self.samples[idx]
         return torch.tensor(x, dtype=torch.long), torch.tensor(y, dtype=torch.long)
 
-dataset = CB513Dataset("data/CB513.csv")
+
+
+
+dataset = PrepareCB513("data/CB513.csv")
 loader = DataLoader(dataset, batch_size=32, shuffle=True)
 
 for xb, yb in loader:
-    print(xb.shape)  # (32, 17)
-    print(yb.shape)  # (32,)
+    print(xb.shape)
+    print(yb.shape)
     break
