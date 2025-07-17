@@ -9,11 +9,10 @@ amino acids in a protein using only its raw
 sequence data, without requiring evolutionary or
 homologous sequence information. The model
 should address key challenges in computational
-biology while minimizing reliance on domainspecific
+biology while minimizing reliance on domain specific
 biological knowledge.  
 
 ---
   
 Pranjal Goyal  
-BTech 2024  
-Integrated Circuit Design and Technology
+Computer Science and Engineering
