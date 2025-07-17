@@ -1,12 +1,12 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
 import pandas as pd
+from config import config
 
-
-
+# for BiLSTM model
 
 class PrepareCB513(Dataset):
-    def __init__(self, csv_path, window_size=17):
+    def __init__(self, csv_path = config['dataset_path'], window_size=config['window_size']):
         self.df = pd.read_csv(csv_path)
         self.window = window_size
         self.half = window_size // 2
@@ -46,12 +46,10 @@ class PrepareCB513(Dataset):
         return torch.tensor(x, dtype=torch.long), torch.tensor(y, dtype=torch.long)
 
 
+# dataset = PrepareCB513(config['dataset_path'])
+# loader = DataLoader(dataset, batch_size=32, shuffle=True)
 
-
-dataset = PrepareCB513("data/CB513.csv")
-loader = DataLoader(dataset, batch_size=32, shuffle=True)
-
-for xb, yb in loader:
-    print(xb.shape)
-    print(yb.shape)
-    break
+# for xb, yb in loader:
+#     print(xb.shape)
+#     print(yb.shape)
+#     break
