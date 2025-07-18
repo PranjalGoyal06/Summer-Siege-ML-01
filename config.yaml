@@ -7,6 +7,8 @@ epochs: 30
 dropout_rate: 0.4
 learning_rate: 0.001
 patience: 3
-checkpoint_path: checkpoints/best_model.pt
 dataset_path: data/CB513.csv
+esm_embeddings_path:  data/esm_embeddings
+esm_model: facebook/esm2_t6_8M_UR50D
 device: auto # cuda if possible else cpu
+use_pretrained_embeddings: False

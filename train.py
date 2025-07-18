@@ -2,24 +2,38 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, random_split
 import time
-from datasets.cb513_dataset import PrepareCB513
+import os
+from datetime import datetime
 from models.bilstm import BiLSTM_Model
 from config import config
 
-# PREPARING DATASET
-dataset = PrepareCB513(config['dataset_path'], window_size=config['window_size'])
+device = config['device']
+print("Using CUDA/CPU: ", device)
+
+# CHOOSING MODEL
+if config["use_pretrained_embeddings"] == False:
+    from datasets.dataset_bilstm import PrepareCB513 as Dataset
+    model = BiLSTM_Model(use_pretrained_embeddings=False).to(device)
+else:
+    from datasets.dataset_esm import ESM_Embedding_Dataset as Dataset
+    model = BiLSTM_Model(use_pretrained_embeddings=True).to(device)
+
+# Setup checkpoint path
+run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+checkpoint_dir = "checkpoints"
+os.makedirs(checkpoint_dir, exist_ok=True)
+model_type = "bilstm" if not config["use_pretrained_embeddings"] else "esm" 
+checkpoint_path = os.path.join(checkpoint_dir, f"{model_type}_{run_timestamp}.pt")
+
+# INITIALISING DATASET
+dataset = Dataset()
+
 train_size = int(config['train_split'] * len(dataset))
 val_size = len(dataset) - train_size
 train_set, val_set = random_split(dataset, [train_size, val_size])
 
 train_loader = DataLoader(train_set, batch_size=config['batch_size'], shuffle=True)
 val_loader = DataLoader(val_set, batch_size=config['batch_size'])
-
-device = config['device']
-print("Using CUDA/CPU: ", device)
-
-# INITIALISING MODEL & LOSS FUNCTION
-model = BiLSTM_Model().to(device)
 
 loss_func = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=config['learning_rate'])
@@ -37,13 +51,14 @@ def train_one_epoch(model, loader):
         loss.backward()
         optimizer.step()
 
-        total_loss += loss.item()
+        total_loss += loss.item() * yb.size(0) 
         _, preds = torch.max(out, dim=1)
         correct += (preds == yb).sum().item()
         total += yb.size(0)
 
+    avg_loss = total_loss / total
     acc = correct / total
-    return total_loss, acc
+    return avg_loss, acc
 
 def evaluate(model, loader):
     model.eval()
@@ -73,7 +88,8 @@ for epoch in range(config['epochs']):
     # Save model if validation improves
     if val_acc > best_val_acc:
         best_val_acc = val_acc
-        torch.save(model.state_dict(), config['checkpoint_path'])
+        torch.save(model.state_dict(), checkpoint_path)
+
         epochs_no_improve = 0
     else:
         epochs_no_improve += 1
@@ -84,3 +100,4 @@ for epoch in range(config['epochs']):
 
 total_time = time.time() - start_time
 print(f"\nTraining complete in {total_time:.2f} seconds. Best Val Acc: {best_val_acc:.4f}")
+print(f"Best model checkpoint saved to {checkpoint_path}")
