@@ -1,5 +1,6 @@
 # Sequence-Based Prediction of Protein Secondary Structure
-Summer Siege 2025
+Summer Siege 2025  
+ML Club  
 
 ## Problem Statement:
 Develop a high-accuracy machine learning model
@@ -15,4 +16,6 @@ biological knowledge.
 ---
   
 Pranjal Goyal  
-Computer Science and Engineering
+Computer Science and Engineering  
+BTech 2024  
+Indian Institute of Technology, Gandhinagar
