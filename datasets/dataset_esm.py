@@ -5,7 +5,7 @@ import pandas as pd
 from config import config
 
 class ESM_Embedding_Dataset(Dataset):
-    def __init__(self, csv_path=config["dataset_path"], embeddings_dir=config["esm_embeddings_path"], window_size=config["window_size"]):
+    def __init__(self, csv_path=config["dataset_path"], embeddings_dir=config["esm_embeddings_path"], window_size=config["esm"]["window_size"]):
         self.window_size = window_size
         self.half_window = window_size // 2
         self.embeddings_dir = embeddings_dir

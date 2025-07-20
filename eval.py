@@ -1,8 +1,5 @@
 import torch
-from sklearn.metrics import classification_report, confusion_matrix
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from torch.utils.data import DataLoader
 from models.bilstm import BiLSTM_Model
 from config import config
@@ -10,16 +7,26 @@ import os
 
 device = config["device"]
 
-if not config["use_pretrained_embeddings"]:
-    from datasets.dataset_bilstm import PrepareCB513 as Dataset
-    model = BiLSTM_Model(use_pretrained_embeddings=False).to(device)
-    model_type = 'bilstm'
-else:
-    from datasets.dataset_esm import ESM_Embedding_Dataset as Dataset
-    model = BiLSTM_Model(use_pretrained_embeddings=True).to(device)
+# Choosing Dataset and model
+if config['use_pretrained_embeddings']:
     model_type = 'esm'
+else:
+    model_type = 'bilstm'
 
-# Load latest checkpoint
+if model_type == 'esm':
+    from datasets.dataset_esm import ESM_Embedding_Dataset as Dataset
+else:
+    from datasets.dataset_bilstm import PrepareCB513 as Dataset
+
+# Initialize model with config parameters
+model = BiLSTM_Model(
+    hidden_dim=config[model_type]['hidden_dim'],
+    dropout_rate=config[model_type]['dropout_rate'],
+    use_pretrained_embeddings=config['use_pretrained_embeddings'],
+    num_layers=config[model_type].get('num_layers', 1)  
+).to(device)
+
+# Load checkpoint
 checkpoint_dir = "checkpoints"
 matching_ckpts = [
     os.path.join(checkpoint_dir, f)
@@ -27,65 +34,36 @@ matching_ckpts = [
     if f.startswith(model_type) and f.endswith(".pt")
 ]
 if not matching_ckpts:
-    raise FileNotFoundError(f"No checkpoints found for model type '{model_type}' in '{checkpoint_dir}'.")
+    raise FileNotFoundError(f"No checkpoints found for '{model_type}' in '{checkpoint_dir}'.")
 
-latest_ckpt_path = max(matching_ckpts, key=os.path.getmtime)
-print(f"Loading latest {model_type} checkpoint: {latest_ckpt_path}")
-
-state_dict = torch.load(latest_ckpt_path, map_location=device)
-model.load_state_dict(state_dict, strict=False)
+ckpt_path = max(matching_ckpts, key=os.path.getmtime)
+print(f"Attempting to load checkpoint: {os.path.basename(ckpt_path)}")
+model.load_state_dict(torch.load(ckpt_path, map_location=device, weights_only=True))
 model.eval()
+print(f"Model loaded successfully with architecture: hidden_dim={model.bilstm.hidden_size}, num_layers={model.bilstm.num_layers}")
 
+
+# Load and prepare test data
 dataset = Dataset()
-loader = DataLoader(dataset, batch_size=config["batch_size"], shuffle=False)
+test_loader = DataLoader(dataset, batch_size=config[model_type]['batch_size'], shuffle=False)
 
-# Evaluate
-all_preds, all_labels = [], []
+# Evaluation
+true_labels = []
+pred_labels = []
 
 with torch.no_grad():
-    for xb, yb in loader:
+    for xb, yb in test_loader:
         xb, yb = xb.to(device), yb.to(device)
-        out = model(xb)
-        _, preds = torch.max(out, dim=1)
-        all_preds.extend(preds.cpu().numpy())
-        all_labels.extend(yb.cpu().numpy())
+        output = model(xb)
+        _, preds = torch.max(output, 1)
+        
+        true_labels.extend(yb.cpu().numpy())
+        pred_labels.extend(preds.cpu().numpy())
 
-# Metrics
-print("Classification Report:")
-report_str = classification_report(all_labels, all_preds, target_names=["H", "E", "C"])
-print(report_str)
-report_dict = classification_report(all_labels, all_preds, target_names=["H", "E", "C"], output_dict=True)
-df = pd.DataFrame(report_dict).transpose()
-df.to_csv(os.path.join("results", f"{model_type}_report.csv"))
-
-cm = confusion_matrix(all_labels, all_preds)
-plt.figure(figsize=(6, 5))
-sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
-            xticklabels=["H", "E", "C"],
-            yticklabels=["H", "E", "C"])
-plt.xlabel("Predicted")
-plt.ylabel("Actual")
-plt.title("Confusion Matrix")
-plt.tight_layout()
-plt.savefig(os.path.join("results", f"{model_type}_confusion_matrix.png"))
-plt.close()
-
-# Metrics
-print("Classification Report:")
-report_str = classification_report(all_labels, all_preds, target_names=["H", "E", "C"])
-print(report_str)
-report_dict = classification_report(all_labels, all_preds, target_names=["H", "E", "C"], output_dict=True)
-df = pd.DataFrame(report_dict).transpose()
-df.to_csv(os.path.join("results", f"{model_type}_report.csv"))
-
-cm = confusion_matrix(all_labels, all_preds)
-plt.figure(figsize=(6, 5))
-sns.heatmap(cm, annot=True, fmt="d", cmap="Blues",
-            xticklabels=["H", "E", "C"],
-            yticklabels=["H", "E", "C"])
-plt.xlabel("Predicted")
-plt.ylabel("Actual")
-plt.title("Confusion Matrix")
-plt.tight_layout()
-plt.savefig(os.path.join("results", f"{model_type}_confusion_matrix.png"))
-plt.close()
+# Calculate metrics
+accuracy = accuracy_score(true_labels, pred_labels)
+print(f"\nTest Accuracy: {accuracy:.4f}")
+print("\nClassification Report:")
+print(classification_report(true_labels, pred_labels, target_names=["H", "E", "C"]))
+print("\nConfusion Matrix:")
+print(confusion_matrix(true_labels, pred_labels))

@@ -6,7 +6,7 @@ from config import config
 # for BiLSTM model
 
 class PrepareCB513(Dataset):
-    def __init__(self, csv_path = config['dataset_path'], window_size=config['window_size']):
+    def __init__(self, csv_path = config['dataset_path'], window_size=config['bilstm']['window_size']):
         self.df = pd.read_csv(csv_path)
         self.window = window_size
         self.half = window_size // 2

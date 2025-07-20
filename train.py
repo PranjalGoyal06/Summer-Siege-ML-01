@@ -11,19 +11,19 @@ device = config['device']
 print("Using CUDA/CPU: ", device)
 
 # CHOOSING MODEL
-if config["use_pretrained_embeddings"] == False:
-    from datasets.dataset_bilstm import PrepareCB513 as Dataset
-    model = BiLSTM_Model(use_pretrained_embeddings=False).to(device)
-else:
+if config['use_pretrained_embeddings']:
     from datasets.dataset_esm import ESM_Embedding_Dataset as Dataset
-    model = BiLSTM_Model(use_pretrained_embeddings=True).to(device)
+    model_type = 'esm'
+else:
+    from datasets.dataset_bilstm import PrepareCB513 as Dataset
+    model_type = 'bilstm'
 
-# Setup checkpoint path
-run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-checkpoint_dir = "checkpoints"
-os.makedirs(checkpoint_dir, exist_ok=True)
-model_type = "bilstm" if not config["use_pretrained_embeddings"] else "esm" 
-checkpoint_path = os.path.join(checkpoint_dir, f"{model_type}_{run_timestamp}.pt")
+model = BiLSTM_Model(
+    hidden_dim=config[model_type]['hidden_dim'],
+    dropout_rate=config[model_type]['dropout_rate'],
+    use_pretrained_embeddings=config['use_pretrained_embeddings'],
+    num_layers=config[model_type].get('num_layers', 1)
+).to(device)
 
 # INITIALISING DATASET
 dataset = Dataset()
@@ -32,72 +32,90 @@ train_size = int(config['train_split'] * len(dataset))
 val_size = len(dataset) - train_size
 train_set, val_set = random_split(dataset, [train_size, val_size])
 
-train_loader = DataLoader(train_set, batch_size=config['batch_size'], shuffle=True)
-val_loader = DataLoader(val_set, batch_size=config['batch_size'])
+train_loader = DataLoader(train_set, batch_size=config[model_type]['batch_size'], shuffle=True)
+val_loader = DataLoader(val_set, batch_size=config[model_type]['batch_size'])
 
 loss_func = nn.CrossEntropyLoss()
-optimizer = torch.optim.Adam(model.parameters(), lr=config['learning_rate'])
+optimizer = torch.optim.Adam(model.parameters(), lr=config[model_type]['learning_rate'])
 
-# -----------TRAINING----------- #
-
-def train_one_epoch(model, loader):
+# FUNCTIONS
+def train_one_epoch(model, loader, optimizer, loss_func, device):
     model.train()
-    total_loss, correct, total = 0, 0, 0
+    total_loss = 0
+    correct = 0
+    total = 0
+    
     for xb, yb in loader:
         xb, yb = xb.to(device), yb.to(device)
         optimizer.zero_grad()
-        out = model(xb)
-        loss = loss_func(out, yb)
+        output = model(xb)
+        loss = loss_func(output, yb)
         loss.backward()
         optimizer.step()
-
-        total_loss += loss.item() * yb.size(0) 
-        _, preds = torch.max(out, dim=1)
-        correct += (preds == yb).sum().item()
+        
+        total_loss += loss.item() * xb.size(0)
+        _, predicted = torch.max(output.data, 1)
         total += yb.size(0)
+        correct += (predicted == yb).sum().item()
+    
+    return total_loss / len(loader.dataset), correct / total
 
-    avg_loss = total_loss / total
-    acc = correct / total
-    return avg_loss, acc
-
-def evaluate(model, loader):
+def evaluate(model, loader, device):
     model.eval()
-    correct, total = 0, 0
+    total_loss = 0
+    correct = 0
+    total = 0
+    
     with torch.no_grad():
         for xb, yb in loader:
             xb, yb = xb.to(device), yb.to(device)
-            out = model(xb)
-            _, preds = torch.max(out, dim=1)
-            correct += (preds == yb).sum().item()
+            output = model(xb)
+            loss = loss_func(output, yb)
+            
+            total_loss += loss.item() * xb.size(0)
+            _, predicted = torch.max(output.data, 1)
             total += yb.size(0)
+            correct += (predicted == yb).sum().item()
+    
     return correct / total
 
-# TRAINING LOOP
-best_val_acc = 0
-epochs_no_improve = 0
-start_time = time.time()
 
-for epoch in range(config['epochs']):
-    epoch_start = time.time()
 
-    train_loss, train_acc = train_one_epoch(model, train_loader)
-    val_acc = evaluate(model, val_loader)
+if __name__ == "__main__":
+    print(f"Training {model_type} with {config['train_split'] * 100}% of the dataset...")
 
-    print(f"[Epoch {epoch+1}] Loss: {train_loss:.4f} | Train Acc: {train_acc:.4f} | Val Acc: {val_acc:.4f} | Time: {time.time() - epoch_start:.2f}s")
+    # TRAINING LOOP
+    best_val_acc = 0
+    epochs_no_improve = 0
+    start_time = time.time()
 
-    # Save model if validation improves
-    if val_acc > best_val_acc:
-        best_val_acc = val_acc
-        torch.save(model.state_dict(), checkpoint_path)
+    # Setup checkpoint path
+    run_timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    checkpoint_dir = "checkpoints"
+    os.makedirs(checkpoint_dir, exist_ok=True)
+    checkpoint_path = os.path.join(checkpoint_dir, f"{model_type}_{run_timestamp}.pt")
 
-        epochs_no_improve = 0
-    else:
-        epochs_no_improve += 1
-        print(f"⚠️ No improvement for {epochs_no_improve} epoch(s)")
-        if epochs_no_improve >= config['patience']:
-            print("⛔ Early stopping triggered.")
+    for epoch in range(config[model_type]['epochs']):
+        epoch_start = time.time()
+        train_loss, train_acc = train_one_epoch(model, train_loader, optimizer, loss_func, device)
+        val_acc = evaluate(model, val_loader, device)
+        
+        # Save best model
+        if val_acc > best_val_acc:
+            best_val_acc = val_acc
+            torch.save(model.state_dict(), checkpoint_path)
+            epochs_no_improve = 0
+        else:
+            epochs_no_improve += 1
+        
+        # Early stopping
+        if epochs_no_improve >= config[model_type]['patience']:
+            print(f'\nEarly stopping after {epoch + 1} epochs')
             break
+        
+        epoch_time = time.time() - epoch_start
+        print(f'Epoch {epoch + 1}/{config[model_type]["epochs"]} - Train Loss: {train_loss:.4f}, ' 
+              f'Train Acc: {train_acc:.4f}, Val Acc: {val_acc:.4f}, Time: {epoch_time:.1f}s')
 
-total_time = time.time() - start_time
-print(f"\nTraining complete in {total_time:.2f} seconds. Best Val Acc: {best_val_acc:.4f}")
-print(f"Best model checkpoint saved to {checkpoint_path}")
+    print(f'\nTraining complete. Best validation accuracy: {best_val_acc:.4f}')
+    print(f'Total training time: {(time.time() - start_time) / 60:.1f} minutes')

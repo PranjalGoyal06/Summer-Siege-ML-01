@@ -1,14 +1,48 @@
-window_size: 17
-train_split: 0.9
-embedding_dim: 50
-hidden_dim: 128
-batch_size: 32
-epochs: 30
-dropout_rate: 0.4
-learning_rate: 0.001
-patience: 3
+bilstm:
+  window_size: 29
+  embedding_dim: 64
+  hidden_dim: 128
+  batch_size: 64
+  epochs: 30
+  dropout_rate: 0.4
+  learning_rate: 0.001
+  patience: 4
+  num_layers: 3
+
+esm:
+  window_size: 21
+  batch_size: 32
+  hidden_dim: 128
+  epochs: 20
+  dropout_rate: 0.4
+  learning_rate: 0.002
+  patience: 2
+  num_layers: 2
+
 dataset_path: data/CB513.csv
-esm_embeddings_path:  data/esm_embeddings
+esm_embeddings_path: data/esm_embeddings
 esm_model: facebook/esm2_t6_8M_UR50D
-device: auto # cuda if possible else cpu
-use_pretrained_embeddings: False
+train_split: 0.8
+device: auto  # cuda if possible else cpu
+use_pretrained_embeddings: True
+model_types: [bilstm, esm]
+
+# HPO search space
+hpo:
+  bilstm:
+    search_method: random
+    n_trials: 50 # only for random search
+    window_size: [17, 21, 25, 29]
+    embedding_dim: [16, 32, 64]
+    hidden_dim: [64, 128, 256]
+    batch_size: [32, 64]
+    dropout_rate: [0.2, 0.3, 0.4, 0.5]
+    learning_rate: [0.0005, 0.001, 0.005] 
+    num_layers: [1, 2, 3]
+  
+  esm:
+    search_method: random
+    n_trials: 50 # only for random search
+    dropout_rate: [0.2, 0.3, 0.4, 0.5]
+    learning_rate: [0.0005, 0.001, 0.005]
+    num_layers: [1, 2]
