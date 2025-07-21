@@ -24,7 +24,7 @@ esm_embeddings_path: data/esm_embeddings
 esm_model: facebook/esm2_t6_8M_UR50D
 train_split: 0.8
 device: auto  # cuda if possible else cpu
-use_pretrained_embeddings: False
+use_pretrained_embeddings: True
 model_types: [bilstm, esm]
 
 
