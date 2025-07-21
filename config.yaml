@@ -1,12 +1,12 @@
 bilstm:
-  window_size: 17
-  embedding_dim: 16
-  hidden_dim: 128
-  batch_size: 32
-  epochs: 30
+  window_size: 31
+  embedding_dim: 128
+  hidden_dim: 256
+  batch_size: 64
+  epochs: 50
   dropout_rate: 0.3
   learning_rate: 0.0005
-  patience: 4
+  patience: 5
   num_layers: 3
 
 esm:
@@ -24,7 +24,7 @@ esm_embeddings_path: data/esm_embeddings
 esm_model: facebook/esm2_t6_8M_UR50D
 train_split: 0.8
 device: auto  # cuda if possible else cpu
-use_pretrained_embeddings: True
+use_pretrained_embeddings: False
 model_types: [bilstm, esm]
 
 

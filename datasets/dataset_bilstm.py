@@ -1,6 +1,9 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
 import pandas as pd
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parent.parent))
 from config import config
 
 # for BiLSTM model
@@ -14,8 +17,8 @@ class PrepareCB513(Dataset):
         self.aa_vocab = "ACDEFGHIKLMNPQRSTVWY"
         self.aa_to_idx = {aa: i for i, aa in enumerate(self.aa_vocab)}
         self.pad_idx = len(self.aa_vocab)
+        self.ss_map = {'H':0, 'E':1, 'C':2}
 
-        self.ss_map = {'H': 0, 'E': 1, 'C': 2}
         self.samples = []
         self._prepare()
 
@@ -46,10 +49,10 @@ class PrepareCB513(Dataset):
         return torch.tensor(x, dtype=torch.long), torch.tensor(y, dtype=torch.long)
 
 
-# dataset = PrepareCB513(config['dataset_path'])
-# loader = DataLoader(dataset, batch_size=32, shuffle=True)
+dataset = PrepareCB513(config['dataset_path'])
+loader = DataLoader(dataset, batch_size=32, shuffle=True)
 
-# for xb, yb in loader:
-#     print(xb.shape)
-#     print(yb.shape)
-#     break
+for xb, yb in loader:
+    print(xb.shape)
+    print(yb.shape)
+    break

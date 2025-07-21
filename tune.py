@@ -53,7 +53,7 @@ def train_model(model_type, hyperparams, base_config):
     for epoch in range(epochs):
         total_epochs = epoch + 1
         train_one_epoch(model, train_loader, optimizer, loss_func, device)
-        val_acc = evaluate(model, val_loader, device)
+        val_acc = evaluate(model, val_loader, loss_func, device)
         
         if val_acc > best_val_acc:
             best_val_acc = val_acc

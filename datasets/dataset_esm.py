@@ -2,6 +2,11 @@ import os
 import torch
 from torch.utils.data import Dataset
 import pandas as pd
+
+import sys
+from pathlib import Path
+sys.path.append(str(Path(__file__).resolve().parent.parent))
+
 from config import config
 
 class ESM_Embedding_Dataset(Dataset):
@@ -51,9 +56,3 @@ class ESM_Embedding_Dataset(Dataset):
         label_idx = self.ss_map[label]
 
         return window.clone().detach().float(), torch.tensor(label_idx).clone().detach().long()
-
-
-
-# ds = ESM_Embedding_Dataset()
-
-# print(ds.__len__())
