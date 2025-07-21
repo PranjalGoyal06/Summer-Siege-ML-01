@@ -1,69 +1,89 @@
+import os
+import argparse
 import torch
-from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from torch.utils.data import DataLoader
+from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from models.bilstm import BiLSTM_Model
 from config import config
-import os
 
 device = config["device"]
 
-# Choosing Dataset and model
-if config['use_pretrained_embeddings']:
-    model_type = 'esm'
-else:
-    model_type = 'bilstm'
+def get_checkpoint_path(ckpt_arg):
+    if ckpt_arg:
+        if not os.path.isfile(ckpt_arg):
+            raise FileNotFoundError(f"Checkpoint '{ckpt_arg}' does not exist.")
+        return ckpt_arg
 
-if model_type == 'esm':
-    from datasets.dataset_esm import ESM_Embedding_Dataset as Dataset
-else:
-    from datasets.dataset_bilstm import PrepareCB513 as Dataset
+    model_type = "esm" if config["use_pretrained_embeddings"] else "bilstm"
+    ckpts = [os.path.join("checkpoints", f) for f in os.listdir("checkpoints")
+             if f.startswith(model_type) and f.endswith(".pt")]
+    return max(ckpts, key=os.path.getmtime)
 
-# Initialize model with config parameters
-model = BiLSTM_Model(
-    hidden_dim=config[model_type]['hidden_dim'],
-    dropout_rate=config[model_type]['dropout_rate'],
-    use_pretrained_embeddings=config['use_pretrained_embeddings'],
-    num_layers=config[model_type].get('num_layers', 1)  
-).to(device)
+def get_model_type(ckpt_path):
+    name = os.path.basename(ckpt_path)
+    if name.startswith("esm"):
+        config["use_pretrained_embeddings"] = True
+        return "esm"
+    if name.startswith("bilstm"):
+        config["use_pretrained_embeddings"] = False
+        return "bilstm"
+    return "esm" if config["use_pretrained_embeddings"] else "bilstm"
 
-# Load checkpoint
-checkpoint_dir = "checkpoints"
-matching_ckpts = [
-    os.path.join(checkpoint_dir, f)
-    for f in os.listdir(checkpoint_dir)
-    if f.startswith(model_type) and f.endswith(".pt")
-]
-if not matching_ckpts:
-    raise FileNotFoundError(f"No checkpoints found for '{model_type}' in '{checkpoint_dir}'.")
+def load_checkpoint(ckpt_path, model_type):
+    checkpoint = torch.load(ckpt_path, map_location="cpu", weights_only=True)
+    if isinstance(checkpoint, dict) and "state_dict" in checkpoint:
+        return checkpoint["state_dict"], checkpoint.get("arch", config[model_type]) # matching hyperparams for that checkpoint
+    if isinstance(checkpoint, dict):
+        return checkpoint, config[model_type] # present config, may/may not match
+    raise ValueError("Unknown checkpoint format")
 
-ckpt_path = max(matching_ckpts, key=os.path.getmtime)
-print(f"Attempting to load checkpoint: {os.path.basename(ckpt_path)}")
-model.load_state_dict(torch.load(ckpt_path, map_location=device, weights_only=True))
-model.eval()
-print(f"Model loaded successfully with architecture: hidden_dim={model.bilstm.hidden_size}, num_layers={model.bilstm.num_layers}")
+def main():
+    parser = argparse.ArgumentParser(description="Evaluate a trained checkpoint.")
+    parser.add_argument("--ckpt", type=str, help="Path to checkpoint file.")
+    args = parser.parse_args()
 
+    ckpt_path = get_checkpoint_path(args.ckpt)
+    model_type = get_model_type(ckpt_path)
+    print(f"Loading checkpoint: {os.path.basename(ckpt_path)}")
 
-# Load and prepare test data
-dataset = Dataset()
-test_loader = DataLoader(dataset, batch_size=config[model_type]['batch_size'], shuffle=False)
+    state_dict, arch = load_checkpoint(ckpt_path, model_type)
 
-# Evaluation
-true_labels = []
-pred_labels = []
+    model = BiLSTM_Model(
+        hidden_dim=arch["hidden_dim"],
+        num_layers=arch["num_layers"],
+        dropout_rate=arch["dropout_rate"],
+        use_pretrained_embeddings=config["use_pretrained_embeddings"],
+        embedding_dim=arch.get("embedding_dim", 16)
+    ).to(device)
 
-with torch.no_grad():
-    for xb, yb in test_loader:
-        xb, yb = xb.to(device), yb.to(device)
-        output = model(xb)
-        _, preds = torch.max(output, 1)
-        
-        true_labels.extend(yb.cpu().numpy())
-        pred_labels.extend(preds.cpu().numpy())
+    missing, unexpected = model.load_state_dict(state_dict, strict=False) # likely for older checkpoints
+    if missing: print(f"Warning: Missing keys: {missing}")
+    if unexpected: print(f"Warning: Unexpected keys: {unexpected}")
 
-# Calculate metrics
-accuracy = accuracy_score(true_labels, pred_labels)
-print(f"\nTest Accuracy: {accuracy:.4f}")
-print("\nClassification Report:")
-print(classification_report(true_labels, pred_labels, target_names=["H", "E", "C"]))
-print("\nConfusion Matrix:")
-print(confusion_matrix(true_labels, pred_labels))
+    model.eval()
+
+    if model_type == "esm":
+        import datasets.dataset_esm
+        dataset = datasets.dataset_esm.ESM_Embedding_Dataset()
+    else:
+        import datasets.dataset_bilstm
+        dataset = datasets.dataset_bilstm.PrepareCB513()
+
+    loader = DataLoader(dataset, batch_size=config[model_type]["batch_size"], shuffle=False)
+
+    true_labels, pred_labels = [], []
+    with torch.no_grad():
+        for xb, yb in loader:
+            xb, yb = xb.to(device), yb.to(device)
+            preds = model(xb).argmax(1)
+            true_labels.extend(yb.cpu().numpy())
+            pred_labels.extend(preds.cpu().numpy())
+
+    print(f"\nTest Accuracy: {accuracy_score(true_labels, pred_labels):.4f}")
+    print("\nClassification Report:")
+    print(classification_report(true_labels, pred_labels, target_names=["H", "E", "C"]))
+    print("\nConfusion Matrix:")
+    print(confusion_matrix(true_labels, pred_labels))
+
+if __name__ == "__main__":
+    main()

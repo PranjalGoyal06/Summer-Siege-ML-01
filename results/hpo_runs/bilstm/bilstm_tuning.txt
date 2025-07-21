@@ -1,0 +1,309 @@
+(ml-proj) PS C:\_repos\Summer-Siege-ML-01> python tune.py
+Using CUDA/CPU:  cuda
+
+Tuning BiLSTM with learned embeddings...
+Running 100 trials with random search
+
+Trial 1/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 256, 'batch_size': 64, 'dropout_rate': 0.5, 'learning_rate': 0.001, 'num_layers': 2}   
+  Epochs: 27  |  Time: 298.3s  |  Val Acc: 0.8087
+
+Trial 2/100: {'window_size': 25, 'embedding_dim': 64, 'hidden_dim': 256, 'batch_size': 64, 'dropout_rate': 0.2, 'learning_rate': 0.0005, 'num_layers': 1}  
+  Epochs: 29  |  Time: 331.1s  |  Val Acc: 0.8105
+
+Trial 3/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 64, 'batch_size': 32, 'dropout_rate': 0.5, 'learning_rate': 0.0005, 'num_layers': 3}
+  Epochs: 24  |  Time: 264.5s  |  Val Acc: 0.8076
+
+Trial 4/100: {'window_size': 39, 'embedding_dim': 128, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.3, 'learning_rate': 0.0005, 'num_layers': 1}
+  Epochs: 23  |  Time: 230.5s  |  Val Acc: 0.8106
+
+Trial 5/100: {'window_size': 39, 'embedding_dim': 16, 'hidden_dim': 64, 'batch_size': 64, 'dropout_rate': 0.3, 'learning_rate': 0.0005, 'num_layers': 2}
+  Epochs: 24  |  Time: 225.8s  |  Val Acc: 0.8095
+
+Trial 6/100: {'window_size': 21, 'embedding_dim': 32, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.3, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 26  |  Time: 227.1s  |  Val Acc: 0.8130
+
+Trial 7/100: {'window_size': 25, 'embedding_dim': 64, 'hidden_dim': 64, 'batch_size': 64, 'dropout_rate': 0.5, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 25  |  Time: 222.0s  |  Val Acc: 0.8068
+
+Trial 8/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.5, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 30  |  Time: 261.5s  |  Val Acc: 0.8072
+
+Trial 9/100: {'window_size': 21, 'embedding_dim': 32, 'hidden_dim': 64, 'batch_size': 32, 'dropout_rate': 0.5, 'learning_rate': 0.001, 'num_layers': 1}
+  Epochs: 24  |  Time: 213.3s  |  Val Acc: 0.8056
+
+Trial 10/100: {'window_size': 25, 'embedding_dim': 16, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.5, 'learning_rate': 0.0005, 'num_layers': 1}
+  Epochs: 28  |  Time: 250.3s  |  Val Acc: 0.8125
+
+Trial 11/100: {'window_size': 29, 'embedding_dim': 16, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.3, 'learning_rate': 0.0005, 'num_layers': 3}
+  Epochs: 27  |  Time: 240.9s  |  Val Acc: 0.8128
+
+Trial 12/100: {'window_size': 39, 'embedding_dim': 64, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.4, 'learning_rate': 0.001, 'num_layers': 1}
+  Epochs: 29  |  Time: 255.3s  |  Val Acc: 0.8064
+
+Trial 13/100: {'window_size': 21, 'embedding_dim': 64, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.2, 'learning_rate': 0.0005, 'num_layers': 3}
+  Epochs: 26  |  Time: 231.9s  |  Val Acc: 0.8121
+
+Trial 14/100: {'window_size': 17, 'embedding_dim': 16, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.2, 'learning_rate': 0.0005, 'num_layers': 2}
+  Epochs: 24  |  Time: 213.2s  |  Val Acc: 0.8127
+
+Trial 15/100: {'window_size': 29, 'embedding_dim': 128, 'hidden_dim': 128, 'batch_size': 64, 'dropout_rate': 0.5, 'learning_rate': 0.0005, 'num_layers': 1}
+  Epochs: 23  |  Time: 203.9s  |  Val Acc: 0.8074
+
+Trial 16/100: {'window_size': 21, 'embedding_dim': 32, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.3, 'learning_rate': 0.005, 'num_layers': 3}
+  Epochs: 28  |  Time: 249.1s  |  Val Acc: 0.8099
+
+Trial 17/100: {'window_size': 17, 'embedding_dim': 128, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.2, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 23  |  Time: 202.2s  |  Val Acc: 0.8075
+
+Trial 18/100: {'window_size': 25, 'embedding_dim': 128, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.4, 'learning_rate': 0.0005, 'num_layers': 1}
+  Epochs: 28  |  Time: 246.8s  |  Val Acc: 0.8115
+
+Trial 19/100: {'window_size': 29, 'embedding_dim': 16, 'hidden_dim': 128, 'batch_size': 64, 'dropout_rate': 0.2, 'learning_rate': 0.001, 'num_layers': 2}
+  Epochs: 26  |  Time: 231.1s  |  Val Acc: 0.8090
+
+Trial 20/100: {'window_size': 25, 'embedding_dim': 128, 'hidden_dim': 128, 'batch_size': 64, 'dropout_rate': 0.4, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 25  |  Time: 222.5s  |  Val Acc: 0.8106
+
+Trial 21/100: {'window_size': 25, 'embedding_dim': 16, 'hidden_dim': 64, 'batch_size': 64, 'dropout_rate': 0.5, 'learning_rate': 0.0005, 'num_layers': 1}
+  Epochs: 28  |  Time: 248.0s  |  Val Acc: 0.8075
+
+Trial 22/100: {'window_size': 17, 'embedding_dim': 16, 'hidden_dim': 64, 'batch_size': 32, 'dropout_rate': 0.3, 'learning_rate': 0.0005, 'num_layers': 3}
+  Epochs: 21  |  Time: 187.4s  |  Val Acc: 0.8032
+
+Trial 23/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.3, 'learning_rate': 0.001, 'num_layers': 1}
+  Epochs: 29  |  Time: 254.2s  |  Val Acc: 0.8093
+
+Trial 24/100: {'window_size': 29, 'embedding_dim': 32, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.4, 'learning_rate': 0.005, 'num_layers': 3}
+  Epochs: 30  |  Time: 263.7s  |  Val Acc: 0.8103
+
+Trial 25/100: {'window_size': 21, 'embedding_dim': 128, 'hidden_dim': 256, 'batch_size': 64, 'dropout_rate': 0.3, 'learning_rate': 0.001, 'num_layers': 2}
+  Epochs: 22  |  Time: 196.1s  |  Val Acc: 0.8136
+
+Trial 26/100: {'window_size': 25, 'embedding_dim': 128, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.5, 'learning_rate': 0.005, 'num_layers': 3}
+  Epochs: 30  |  Time: 266.7s  |  Val Acc: 0.8138
+
+Trial 27/100: {'window_size': 17, 'embedding_dim': 128, 'hidden_dim': 64, 'batch_size': 32, 'dropout_rate': 0.3, 'learning_rate': 0.005, 'num_layers': 3}
+  Epochs: 26  |  Time: 230.7s  |  Val Acc: 0.8070
+
+Trial 28/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.3, 'learning_rate': 0.005, 'num_layers': 3}
+  Epochs: 30  |  Time: 262.9s  |  Val Acc: 0.8059
+
+Trial 29/100: {'window_size': 17, 'embedding_dim': 32, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.3, 'learning_rate': 0.005, 'num_layers': 2}
+  Epochs: 30  |  Time: 266.2s  |  Val Acc: 0.8160
+
+Trial 30/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.3, 'learning_rate': 0.0005, 'num_layers': 3}
+  Epochs: 25  |  Time: 221.9s  |  Val Acc: 0.8096
+
+Trial 31/100: {'window_size': 29, 'embedding_dim': 64, 'hidden_dim': 256, 'batch_size': 16, 'dropout_rate': 0.5, 'learning_rate': 0.0005, 'num_layers': 3}
+  Epochs: 23  |  Time: 206.1s  |  Val Acc: 0.8112
+
+Trial 32/100: {'window_size': 29, 'embedding_dim': 128, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.4, 'learning_rate': 0.0005, 'num_layers': 2}
+  Epochs: 26  |  Time: 230.8s  |  Val Acc: 0.8106
+
+Trial 33/100: {'window_size': 17, 'embedding_dim': 16, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.5, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 29  |  Time: 258.6s  |  Val Acc: 0.8102
+
+Trial 34/100: {'window_size': 17, 'embedding_dim': 16, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.2, 'learning_rate': 0.0005, 'num_layers': 1}
+  Epochs: 26  |  Time: 228.5s  |  Val Acc: 0.8114
+
+Trial 35/100: {'window_size': 29, 'embedding_dim': 128, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.2, 'learning_rate': 0.0005, 'num_layers': 3}
+  Epochs: 25  |  Time: 221.7s  |  Val Acc: 0.8095
+
+Trial 36/100: {'window_size': 21, 'embedding_dim': 64, 'hidden_dim': 256, 'batch_size': 16, 'dropout_rate': 0.4, 'learning_rate': 0.0005, 'num_layers': 1}
+  Epochs: 26  |  Time: 231.8s  |  Val Acc: 0.8131
+
+Trial 37/100: {'window_size': 25, 'embedding_dim': 16, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.2, 'learning_rate': 0.0005, 'num_layers': 2}
+  Epochs: 30  |  Time: 270.0s  |  Val Acc: 0.8112
+
+Trial 38/100: {'window_size': 29, 'embedding_dim': 128, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.3, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 30  |  Time: 277.0s  |  Val Acc: 0.8078
+
+Trial 39/100: {'window_size': 39, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.3, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 30  |  Time: 266.5s  |  Val Acc: 0.8099
+
+Trial 40/100: {'window_size': 21, 'embedding_dim': 16, 'hidden_dim': 256, 'batch_size': 64, 'dropout_rate': 0.4, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 24  |  Time: 211.2s  |  Val Acc: 0.8106
+
+Trial 41/100: {'window_size': 29, 'embedding_dim': 16, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.2, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 29  |  Time: 257.3s  |  Val Acc: 0.8103
+
+Trial 42/100: {'window_size': 17, 'embedding_dim': 32, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.5, 'learning_rate': 0.001, 'num_layers': 1}
+  Epochs: 26  |  Time: 230.3s  |  Val Acc: 0.8121
+
+Trial 43/100: {'window_size': 17, 'embedding_dim': 16, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.4, 'learning_rate': 0.0005, 'num_layers': 3}
+  Epochs: 26  |  Time: 233.1s  |  Val Acc: 0.8110
+
+Trial 44/100: {'window_size': 17, 'embedding_dim': 16, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.5, 'learning_rate': 0.001, 'num_layers': 2}
+  Epochs: 26  |  Time: 230.5s  |  Val Acc: 0.8074
+
+Trial 45/100: {'window_size': 25, 'embedding_dim': 128, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.5, 'learning_rate': 0.0005, 'num_layers': 1}
+  Epochs: 29  |  Time: 257.7s  |  Val Acc: 0.8107
+
+Trial 46/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 64, 'batch_size': 64, 'dropout_rate': 0.5, 'learning_rate': 0.001, 'num_layers': 1}
+  Epochs: 29  |  Time: 258.3s  |  Val Acc: 0.8155
+
+Trial 47/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.5, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 23  |  Time: 201.4s  |  Val Acc: 0.8125
+
+Trial 48/100: {'window_size': 39, 'embedding_dim': 128, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.2, 'learning_rate': 0.0005, 'num_layers': 1}
+  Epochs: 23  |  Time: 204.0s  |  Val Acc: 0.8061
+
+Trial 49/100: {'window_size': 17, 'embedding_dim': 16, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.4, 'learning_rate': 0.0005, 'num_layers': 3}
+  Epochs: 25  |  Time: 222.6s  |  Val Acc: 0.8091
+
+Trial 50/100: {'window_size': 21, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.5, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 30  |  Time: 266.8s  |  Val Acc: 0.8067
+
+Trial 51/100: {'window_size': 21, 'embedding_dim': 16, 'hidden_dim': 64, 'batch_size': 32, 'dropout_rate': 0.4, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 22  |  Time: 196.8s  |  Val Acc: 0.8122
+
+Trial 52/100: {'window_size': 39, 'embedding_dim': 64, 'hidden_dim': 64, 'batch_size': 32, 'dropout_rate': 0.3, 'learning_rate': 0.005, 'num_layers': 2}
+  Epochs: 30  |  Time: 268.3s  |  Val Acc: 0.8108
+
+Trial 53/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.2, 'learning_rate': 0.001, 'num_layers': 2}
+  Epochs: 30  |  Time: 263.3s  |  Val Acc: 0.8111
+
+Trial 54/100: {'window_size': 39, 'embedding_dim': 128, 'hidden_dim': 256, 'batch_size': 16, 'dropout_rate': 0.2, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 30  |  Time: 266.3s  |  Val Acc: 0.8086
+
+Trial 55/100: {'window_size': 29, 'embedding_dim': 32, 'hidden_dim': 128, 'batch_size': 64, 'dropout_rate': 0.5, 'learning_rate': 0.001, 'num_layers': 2}
+  Epochs: 29  |  Time: 258.1s  |  Val Acc: 0.8096
+
+Trial 56/100: {'window_size': 17, 'embedding_dim': 32, 'hidden_dim': 128, 'batch_size': 64, 'dropout_rate': 0.4, 'learning_rate': 0.005, 'num_layers': 3}
+  Epochs: 25  |  Time: 222.5s  |  Val Acc: 0.8146
+
+Trial 57/100: {'window_size': 29, 'embedding_dim': 128, 'hidden_dim': 64, 'batch_size': 32, 'dropout_rate': 0.3, 'learning_rate': 0.005, 'num_layers': 2}
+  Epochs: 27  |  Time: 236.0s  |  Val Acc: 0.8093
+
+Trial 58/100: {'window_size': 29, 'embedding_dim': 64, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.2, 'learning_rate': 0.0005, 'num_layers': 3}
+  Epochs: 25  |  Time: 223.1s  |  Val Acc: 0.8108
+
+Trial 59/100: {'window_size': 25, 'embedding_dim': 128, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.5, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 29  |  Time: 256.5s  |  Val Acc: 0.8112
+
+Trial 60/100: {'window_size': 21, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.5, 'learning_rate': 0.005, 'num_layers': 2}
+  Epochs: 30  |  Time: 266.7s  |  Val Acc: 0.8158
+
+Trial 61/100: {'window_size': 17, 'embedding_dim': 32, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.2, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 24  |  Time: 213.8s  |  Val Acc: 0.8065
+
+Trial 62/100: {'window_size': 21, 'embedding_dim': 128, 'hidden_dim': 128, 'batch_size': 64, 'dropout_rate': 0.3, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 23  |  Time: 201.0s  |  Val Acc: 0.8103
+
+Trial 63/100: {'window_size': 39, 'embedding_dim': 16, 'hidden_dim': 256, 'batch_size': 16, 'dropout_rate': 0.5, 'learning_rate': 0.0005, 'num_layers': 1}
+  Epochs: 30  |  Time: 265.7s  |  Val Acc: 0.8117
+
+Trial 64/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.3, 'learning_rate': 0.001, 'num_layers': 1}
+  Epochs: 25  |  Time: 222.9s  |  Val Acc: 0.8092
+
+Trial 65/100: {'window_size': 39, 'embedding_dim': 128, 'hidden_dim': 64, 'batch_size': 64, 'dropout_rate': 0.2, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 26  |  Time: 230.8s  |  Val Acc: 0.8078
+
+Trial 66/100: {'window_size': 29, 'embedding_dim': 128, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.4, 'learning_rate': 0.005, 'num_layers': 3}
+  Epochs: 25  |  Time: 222.1s  |  Val Acc: 0.8090
+
+Trial 67/100: {'window_size': 39, 'embedding_dim': 128, 'hidden_dim': 128, 'batch_size': 64, 'dropout_rate': 0.2, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 26  |  Time: 231.8s  |  Val Acc: 0.8117
+
+Trial 68/100: {'window_size': 21, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.2, 'learning_rate': 0.0005, 'num_layers': 2}
+  Epochs: 23  |  Time: 204.3s  |  Val Acc: 0.8108
+
+Trial 69/100: {'window_size': 39, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.5, 'learning_rate': 0.0005, 'num_layers': 1}
+  Epochs: 30  |  Time: 264.3s  |  Val Acc: 0.8090
+
+Trial 70/100: {'window_size': 29, 'embedding_dim': 128, 'hidden_dim': 256, 'batch_size': 64, 'dropout_rate': 0.3, 'learning_rate': 0.005, 'num_layers': 3}
+  Epochs: 21  |  Time: 186.4s  |  Val Acc: 0.8051
+
+Trial 71/100: {'window_size': 17, 'embedding_dim': 16, 'hidden_dim': 256, 'batch_size': 64, 'dropout_rate': 0.5, 'learning_rate': 0.001, 'num_layers': 2}
+  Epochs: 26  |  Time: 231.1s  |  Val Acc: 0.8092
+
+Trial 72/100: {'window_size': 25, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.3, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 22  |  Time: 196.4s  |  Val Acc: 0.8045
+
+Trial 73/100: {'window_size': 29, 'embedding_dim': 32, 'hidden_dim': 256, 'batch_size': 64, 'dropout_rate': 0.2, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 20  |  Time: 177.7s  |  Val Acc: 0.8081
+
+Trial 74/100: {'window_size': 25, 'embedding_dim': 128, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.3, 'learning_rate': 0.0005, 'num_layers': 2}
+  Epochs: 24  |  Time: 214.5s  |  Val Acc: 0.8090
+
+Trial 75/100: {'window_size': 25, 'embedding_dim': 64, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.4, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 25  |  Time: 218.2s  |  Val Acc: 0.8133
+
+Trial 76/100: {'window_size': 39, 'embedding_dim': 32, 'hidden_dim': 128, 'batch_size': 64, 'dropout_rate': 0.4, 'learning_rate': 0.001, 'num_layers': 2}
+  Epochs: 25  |  Time: 222.7s  |  Val Acc: 0.8114
+
+Trial 77/100: {'window_size': 25, 'embedding_dim': 128, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.4, 'learning_rate': 0.005, 'num_layers': 2}
+  Epochs: 30  |  Time: 267.3s  |  Val Acc: 0.8098
+
+Trial 78/100: {'window_size': 29, 'embedding_dim': 128, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.2, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 30  |  Time: 265.5s  |  Val Acc: 0.8121
+
+Trial 79/100: {'window_size': 25, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.5, 'learning_rate': 0.005, 'num_layers': 2}
+  Epochs: 27  |  Time: 240.2s  |  Val Acc: 0.8093
+
+Trial 80/100: {'window_size': 25, 'embedding_dim': 32, 'hidden_dim': 256, 'batch_size': 16, 'dropout_rate': 0.3, 'learning_rate': 0.001, 'num_layers': 2}
+  Epochs: 28  |  Time: 249.4s  |  Val Acc: 0.8070
+
+Trial 81/100: {'window_size': 21, 'embedding_dim': 16, 'hidden_dim': 256, 'batch_size': 16, 'dropout_rate': 0.2, 'learning_rate': 0.005, 'num_layers': 2}
+  Epochs: 24  |  Time: 211.1s  |  Val Acc: 0.8140
+
+Trial 82/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 64, 'dropout_rate': 0.3, 'learning_rate': 0.005, 'num_layers': 3}
+  Epochs: 30  |  Time: 266.1s  |  Val Acc: 0.8122
+
+Trial 83/100: {'window_size': 17, 'embedding_dim': 128, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.5, 'learning_rate': 0.005, 'num_layers': 2}
+  Epochs: 25  |  Time: 222.7s  |  Val Acc: 0.8105
+
+Trial 84/100: {'window_size': 21, 'embedding_dim': 32, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.5, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 25  |  Time: 221.6s  |  Val Acc: 0.8123
+
+Trial 85/100: {'window_size': 29, 'embedding_dim': 16, 'hidden_dim': 64, 'batch_size': 32, 'dropout_rate': 0.3, 'learning_rate': 0.0005, 'num_layers': 1}
+  Epochs: 25  |  Time: 223.7s  |  Val Acc: 0.8109
+
+Trial 86/100: {'window_size': 25, 'embedding_dim': 16, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.5, 'learning_rate': 0.0005, 'num_layers': 2}
+  Epochs: 25  |  Time: 222.6s  |  Val Acc: 0.8084
+
+Trial 87/100: {'window_size': 39, 'embedding_dim': 32, 'hidden_dim': 256, 'batch_size': 32, 'dropout_rate': 0.4, 'learning_rate': 0.001, 'num_layers': 1}
+  Epochs: 30  |  Time: 262.6s  |  Val Acc: 0.8084
+
+Trial 88/100: {'window_size': 21, 'embedding_dim': 16, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.3, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 22  |  Time: 196.3s  |  Val Acc: 0.8078
+
+Trial 89/100: {'window_size': 21, 'embedding_dim': 32, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.3, 'learning_rate': 0.001, 'num_layers': 1}
+  Epochs: 23  |  Time: 206.2s  |  Val Acc: 0.8095
+
+Trial 90/100: {'window_size': 17, 'embedding_dim': 16, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.4, 'learning_rate': 0.001, 'num_layers': 2}
+  Epochs: 28  |  Time: 248.6s  |  Val Acc: 0.8080
+
+Trial 91/100: {'window_size': 25, 'embedding_dim': 128, 'hidden_dim': 128, 'batch_size': 64, 'dropout_rate': 0.5, 'learning_rate': 0.005, 'num_layers': 2}
+  Epochs: 22  |  Time: 195.1s  |  Val Acc: 0.8106
+
+Trial 92/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.5, 'learning_rate': 0.001, 'num_layers': 1}
+  Epochs: 30  |  Time: 264.1s  |  Val Acc: 0.8095
+
+Trial 93/100: {'window_size': 21, 'embedding_dim': 32, 'hidden_dim': 128, 'batch_size': 16, 'dropout_rate': 0.3, 'learning_rate': 0.001, 'num_layers': 3}
+  Epochs: 27  |  Time: 240.8s  |  Val Acc: 0.8107
+
+Trial 94/100: {'window_size': 29, 'embedding_dim': 64, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.5, 'learning_rate': 0.005, 'num_layers': 2}
+
+Trial 95/100: {'window_size': 17, 'embedding_dim': 32, 'hidden_dim': 64, 'batch_size': 64, 'dropout_rate': 0.4, 'learning_rate': 0.005, 'num_layers': 1}
+  Epochs: 26  |  Time: 230.8s  |  Val Acc: 0.8083
+
+Trial 96/100: {'window_size': 17, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.4, 'learning_rate': 0.005, 'num_layers': 2}
+  Epochs: 26  |  Time: 230.8s  |  Val Acc: 0.8083
+
+Trial 97/100: {'window_size': 39, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.4, 'learning_rate': 0.0005, 'num_layers': 3}
+  Epochs: 28  |  Time: 245.7s  |  Val Acc: 0.8118
+
+Trial 98/100: {'window_size': 21, 'embedding_dim': 32, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.4, 'learning_rate': 0.0005, 'num_layers': 3}
+  Epochs: ??  |  Time: ????  |  Val Acc: ????
+
+Trial 99/100: {'window_size': 21, 'embedding_dim': 128, 'hidden_dim': 64, 'batch_size': 32, 'dropout_rate': 0.2, 'learning_rate': 0.001, 'num_layers': 1}
+  Epochs: 27  |  Time: 241.7s  |  Val Acc: 0.8067
+
+Trial 100/100: {'window_size': 29, 'embedding_dim': 64, 'hidden_dim': 128, 'batch_size': 32, 'dropout_rate': 0.2, 'learning_rate': 0.0005, 'num_layers': 2}
+  Epochs: 20  |  Time: 178.0s  |  Val Acc: 0.8090
+
+BEST bilstm: 0.8160 with {'window_size': 17, 'embedding_dim': 32, 'hidden_dim': 64, 'batch_size': 16, 'dropout_rate': 0.3, 'learning_rate': 0.005, 'num_layers': 2}
+Results saved to results/hpo_runs/bilstm
+
+HPO Complete!

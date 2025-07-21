@@ -16,6 +16,7 @@ def train_model(model_type, hyperparams, base_config):
     config = base_config.copy()
     config.update(hyperparams)
     device = config['device']
+    epochs = config[model_type]['epochs']  # Get epochs from config based on model type
     
     if model_type == 'esm':
         from datasets.dataset_esm import ESM_Embedding_Dataset as Dataset
@@ -23,10 +24,10 @@ def train_model(model_type, hyperparams, base_config):
         from datasets.dataset_bilstm import PrepareCB513 as Dataset
     
     model = BiLSTM_Model(
-        hidden_dim=config['hidden_dim'],
-        dropout_rate=config['dropout_rate'],
+        hidden_dim=config[model_type]['hidden_dim'],
+        dropout_rate=config[model_type]['dropout_rate'],
         use_pretrained_embeddings=config['use_pretrained_embeddings'],
-        num_layers=config.get('num_layers', 1)
+        num_layers=config[model_type].get('num_layers', 1)
     ).to(device)
     
     # Dataset setup
@@ -36,20 +37,20 @@ def train_model(model_type, hyperparams, base_config):
     labels = [dataset[i][1].item() for i in indices]
     train_idx, val_idx = train_test_split(indices, test_size=1-config['train_split'], stratify=labels, random_state=42)
     train_loader = DataLoader(torch.utils.data.Subset(dataset, train_idx), 
-                            batch_size=config['batch_size'], shuffle=True)
+                            batch_size=config[model_type]['batch_size'], shuffle=True)
     val_loader = DataLoader(torch.utils.data.Subset(dataset, val_idx), 
-                          batch_size=config['batch_size'])
+                          batch_size=config[model_type]['batch_size'])
     
     # Training
     loss_func = torch.nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr=config['learning_rate'])
+    optimizer = torch.optim.Adam(model.parameters(), lr=config[model_type]['learning_rate'])
     
     best_val_acc = 0
     best_model_state = None
     epochs_no_improve = 0
     total_epochs = 0
     
-    for epoch in range(config['epochs']):
+    for epoch in range(epochs):
         total_epochs = epoch + 1
         train_one_epoch(model, train_loader, optimizer, loss_func, device)
         val_acc = evaluate(model, val_loader, device)
@@ -60,7 +61,7 @@ def train_model(model_type, hyperparams, base_config):
             epochs_no_improve = 0
         else:
             epochs_no_improve += 1
-            if epochs_no_improve >= config['patience']:
+            if epochs_no_improve >= config[model_type]['patience']:
                 break
     
     if torch.cuda.is_available():
@@ -130,7 +131,7 @@ for i, hyperparams in enumerate(param_combinations, 1):
         print(f"  Epochs: {epochs_trained}  |  Time: {trial_time:.1f}s  |  Val Acc: {val_acc:.4f}")
     
     except Exception as e:
-        print(f"❌ Failed: {e}")
+        print(f"Failed: {e}")
         all_trials.append({"trial": i, "params": hyperparams, 
                          "val_accuracy": 0.0, "error": str(e)})
 
@@ -144,11 +145,16 @@ with open(f"{session_dir}/hpo_summary.json", 'w') as f:
         "all_trials": all_trials
     }, f, indent=2)
 
-if best_model_state:
-    torch.save(best_model_state, f"{session_dir}/best_model.pt")
+if best_model_state and best_trial:
+    # Save model with architecture parameters
+    checkpoint = {
+        'state_dict': best_model_state,
+        'model_arch': best_trial['hyperparameters'],
+    }
+    torch.save(checkpoint, f"{session_dir}/best_model.pt")
 
 if best_trial:
-    print(f"🏆 Best {model_type}: {best_trial['val_accuracy']:.4f} with {best_trial['hyperparameters']}")
+    print(f"BEST {model_type}: {best_trial['val_accuracy']:.4f} with {best_trial['hyperparameters']}")
 
 print(f"Results saved to {session_dir}")
 print("\nHPO Complete!")

@@ -1,0 +1,85 @@
+(ml-proj) PS C:\_repos\Summer-Siege-ML-01> python tune.py
+Using CUDA/CPU:  cuda
+
+Tuning BiLSTM with pre-trained ESM embeddings...
+Running 25 trials with random search
+
+Trial 1/25: {'dropout_rate': 0.4, 'hidden_dim': 128, 'learning_rate': 0.005, 'num_layers': 2, 'batch_size': 32, 'patience': 2}
+(ml-proj) PS C:\_repos\Summer-Siege-ML-01> python tune.py
+Using CUDA/CPU:  cuda
+
+Trial 2/25: {'dropout_rate': 0.3, 'hidden_dim': 128, 'learning_rate': 0.001, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 14  |  Time: 1240.8s  |  Val Acc: 0.8377
+
+Trial 3/25: {'dropout_rate': 0.2, 'hidden_dim': 128, 'learning_rate': 0.001, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 11  |  Time: 972.9s  |  Val Acc: 0.8259
+
+Trial 4/25: {'dropout_rate': 0.5, 'hidden_dim': 128, 'learning_rate': 0.0005, 'num_layers': 2, 'batch_size': 32, 'patience': 2}
+  Epochs: 14  |  Time: 1223.7s  |  Val Acc: 0.8320
+
+Trial 5/25: {'dropout_rate': 0.5, 'hidden_dim': 128, 'learning_rate': 0.005, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 16  |  Time: 1389.2s  |  Val Acc: 0.8333
+
+Trial 6/25: {'dropout_rate': 0.4, 'hidden_dim': 128, 'learning_rate': 0.0005, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 13  |  Time: 1136.8s  |  Val Acc: 0.8312
+
+Trial 7/25: {'dropout_rate': 0.3, 'hidden_dim': 128, 'learning_rate': 0.0005, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 17  |  Time: 1471.6s  |  Val Acc: 0.8309
+
+Trial 8/25: {'dropout_rate': 0.5, 'hidden_dim': 128, 'learning_rate': 0.005, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 17  |  Time: 1493.4s  |  Val Acc: 0.8350
+
+Trial 9/25: {'dropout_rate': 0.3, 'hidden_dim': 128, 'learning_rate': 0.005, 'num_layers': 2, 'batch_size': 32, 'patience': 2}
+  Epochs: 18  |  Time: 1555.3s  |  Val Acc: 0.8335
+
+Trial 10/25: {'dropout_rate': 0.2, 'hidden_dim': 128, 'learning_rate': 0.005, 'num_layers': 2, 'batch_size': 32, 'patience': 2}
+  Epochs: 15  |  Time: 1308.2s  |  Val Acc: 0.8311
+
+Trial 11/25: {'dropout_rate': 0.2, 'hidden_dim': 128, 'learning_rate': 0.005, 'num_layers': 2, 'batch_size': 32, 'patience': 2}
+  Epochs: 13  |  Time: 1139.7s  |  Val Acc: 0.8294
+
+Trial 12/25: {'dropout_rate': 0.4, 'hidden_dim': 128, 'learning_rate': 0.005, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 14  |  Time: 1224.3s  |  Val Acc: 0.8286
+
+Trial 13/25: {'dropout_rate': 0.4, 'hidden_dim': 128, 'learning_rate': 0.005, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 19  |  Time: 1639.7s  |  Val Acc: 0.8338
+
+Trial 14/25: {'dropout_rate': 0.2, 'hidden_dim': 128, 'learning_rate': 0.001, 'num_layers': 2, 'batch_size': 32, 'patience': 2}
+  Epochs: 13  |  Time: 1139.9s  |  Val Acc: 0.8250
+
+Trial 15/25: {'dropout_rate': 0.2, 'hidden_dim': 128, 'learning_rate': 0.005, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 16  |  Time: 1389.9s  |  Val Acc: 0.8351
+
+Trial 16/25: {'dropout_rate': 0.2, 'hidden_dim': 128, 'learning_rate': 0.001, 'num_layers': 2, 'batch_size': 32, 'patience': 2}
+  Epochs: 17  |  Time: 1474.6s  |  Val Acc: 0.8292
+
+Trial 17/25: {'dropout_rate': 0.2, 'hidden_dim': 128, 'learning_rate': 0.001, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 17  |  Time: 1474.6s  |  Val Acc: 0.8292
+
+Trial 18/25: {'dropout_rate': 0.2, 'hidden_dim': 128, 'learning_rate': 0.001, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 14  |  Time: 1225.4s  |  Val Acc: 0.8296
+
+Trial 19/25: {'dropout_rate': ??, 'hidden_dim': ??, 'learning_rate': ??, 'num_layers': ??, 'batch_size': 32, 'patience': 2}
+  Epochs: 12  |  Time: 1345.5s  |  Val Acc: 0.8249
+
+Trial 20/25: {'dropout_rate': 0.4, 'hidden_dim': 128, 'learning_rate': 0.0005, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 20  |  Time: 3597.9s  |  Val Acc: 0.8339
+
+Trial 21/25: {'dropout_rate': 0.4, 'hidden_dim': 128, 'learning_rate': 0.001, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 20  |  Time: 3637.0s  |  Val Acc: 0.8395
+
+Trial 22/25: {'dropout_rate': 0.4, 'hidden_dim': 128, 'learning_rate': 0.001, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 20  |  Time: 2970.5s  |  Val Acc: 0.8339
+
+Trial 23/25: {'dropout_rate': 0.3, 'hidden_dim': 128, 'learning_rate': 0.001, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+  Epochs: 13  |  Time: 2120.6s  |  Val Acc: 0.8312
+
+Trial 24/25: {'dropout_rate': 0.2, 'hidden_dim': 128, 'learning_rate': 0.001, 'num_layers': 2, 'batch_size': 32, 'patience': 2}
+Epochs: 15  |  Time: 1707.2s  |  Val Acc: 0.8304
+
+Trial 25/25: {'dropout_rate': 0.5, 'hidden_dim': 128, 'learning_rate': 0.005, 'num_layers': 2, 'batch_size': 32, 'patience': 2}
+  Epochs: 15  |  Time: 1560.9s  |  Val Acc: 0.8312
+🏆 Best esm: 0.8395 with {'dropout_rate': 0.4, 'hidden_dim': 128, 'learning_rate': 0.001, 'num_layers': 1, 'batch_size': 32, 'patience': 2}
+Results saved to results/hpo_runs/esm
+
+HPO Complete!

@@ -2,15 +2,17 @@ import torch
 import torch.nn as nn
 from config import config
 
+model_type = "esm" if config['use_pretrained_embeddings'] else "bilstm"
+
 class BiLSTM_Model(nn.Module):
     def __init__(self,
                  vocab_size=21,
                  embedding_dim=config['bilstm']['embedding_dim'],
-                 hidden_dim=config['bilstm']['hidden_dim'],
+                 hidden_dim=config[model_type]['hidden_dim'],
                  num_classes=3,
                  padding_idx=20,
-                 num_layers=config['bilstm']['num_layers'],
-                 dropout_rate=config['bilstm']['dropout_rate'],
+                 num_layers=config[model_type]['num_layers'],
+                 dropout_rate=config[model_type]['dropout_rate'],
                  use_pretrained_embeddings=config['use_pretrained_embeddings'],
                  ):
 

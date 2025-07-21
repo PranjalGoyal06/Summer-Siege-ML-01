@@ -103,7 +103,13 @@ if __name__ == "__main__":
         # Save best model
         if val_acc > best_val_acc:
             best_val_acc = val_acc
-            torch.save(model.state_dict(), checkpoint_path)
+            torch.save(
+                {
+                    "state_dict": model.state_dict(),
+                    "arch": config[model_type],
+                },
+                checkpoint_path,
+            )
             epochs_no_improve = 0
         else:
             epochs_no_improve += 1
