@@ -29,8 +29,8 @@ biological knowledge.
 - `config.yaml` - Configuration file for model parameters
 
 ## Dataset Sources
-- **CB513 dataset** – standard benchmark for protein secondary structure prediction.  
-- **Preprocessing:** Windowed sequence inputs; ESM (Evolutionary Scale Modeling) embeddings extracted for each residue.  
+- **CB513 dataset** – standard benchmark for protein secondary structure prediction. Downloaded from [Hugging Face](http://huggingface.co/datasets/proteinea/secondary_structure_prediction/tree/main)
+- **Preprocessing:** Windowed sequence inputs; ESM (Evolutionary Scale Modelling) embeddings extracted for each residue.  
 - No evolutionary profiles (PSSMs/MSAs) used.
 
 ## Architecture Overview
