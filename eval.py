@@ -1,12 +1,20 @@
 import os
 import argparse
+import json
 import torch
 from torch.utils.data import DataLoader
 from sklearn.metrics import classification_report, confusion_matrix, accuracy_score
 from models.bilstm import BiLSTM_Model
 from config import config
+from pathlib import Path
 
 device = config["device"]
+SPLITS_PATH = Path(__file__).resolve().parent / "splits.json"
+
+
+def load_split_ids(path=SPLITS_PATH):
+    with open(path, "r") as f:
+        return json.load(f)
 
 def get_checkpoint_path(ckpt_arg):
     if ckpt_arg:
@@ -14,9 +22,8 @@ def get_checkpoint_path(ckpt_arg):
             raise FileNotFoundError(f"Checkpoint '{ckpt_arg}' does not exist.")
         return ckpt_arg
 
-    model_type = "esm" if config["use_pretrained_embeddings"] else "bilstm"
     ckpts = [os.path.join("checkpoints", f) for f in os.listdir("checkpoints")
-             if f.startswith(model_type) and f.endswith(".pt")]
+             if f.endswith(".pt")]
     return max(ckpts, key=os.path.getmtime)
 
 def get_model_type(ckpt_path):
@@ -62,12 +69,14 @@ def main():
 
     model.eval()
 
+    splits = load_split_ids()
+
     if model_type == "esm":
         import datasets.dataset_esm
-        dataset = datasets.dataset_esm.ESM_Embedding_Dataset()
+        dataset = datasets.dataset_esm.ESM_Embedding_Dataset(protein_indices=splits["test_ids"])
     else:
         import datasets.dataset_bilstm
-        dataset = datasets.dataset_bilstm.PrepareCB513()
+        dataset = datasets.dataset_bilstm.PrepareCB513(protein_indices=splits["test_ids"])
 
     loader = DataLoader(dataset, batch_size=config[model_type]["batch_size"], shuffle=False)
 

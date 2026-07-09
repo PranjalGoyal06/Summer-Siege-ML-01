@@ -1,13 +1,13 @@
 bilstm:
-  window_size: 31
-  embedding_dim: 128
-  hidden_dim: 256
-  batch_size: 64
+  window_size: 17
+  embedding_dim: 32
+  hidden_dim: 64
+  batch_size: 16
   epochs: 50
   dropout_rate: 0.3
-  learning_rate: 0.0005
+  learning_rate: 0.005
   patience: 5
-  num_layers: 3
+  num_layers: 2
 
 esm:
   window_size: 21

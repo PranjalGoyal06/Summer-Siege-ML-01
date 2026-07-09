@@ -10,12 +10,15 @@ sys.path.append(str(Path(__file__).resolve().parent.parent))
 from config import config
 
 class ESM_Embedding_Dataset(Dataset):
-    def __init__(self, csv_path=config["dataset_path"], embeddings_dir=config["esm_embeddings_path"], window_size=config["esm"]["window_size"]):
+    def __init__(self, csv_path=config["dataset_path"], embeddings_dir=config["esm_embeddings_path"], window_size=config["esm"]["window_size"], protein_indices=None):
         self.window_size = window_size
         self.half_window = window_size // 2
         self.embeddings_dir = embeddings_dir
+        self.ss_map = {'H': 0, 'E': 1, 'C': 2}
 
         df = pd.read_csv(csv_path)
+        if protein_indices is not None:
+            df = df.iloc[list(protein_indices)]
         
         self.sequences = []
         for i, row in df.iterrows():
@@ -51,8 +54,6 @@ class ESM_Embedding_Dataset(Dataset):
         start = center_idx
         end = center_idx + self.window_size
         window = padded[start:end]
-
-        self.ss_map = {'H': 0, 'E': 1, 'C': 2}
         label_idx = self.ss_map[label]
 
         return window.clone().detach().float(), torch.tensor(label_idx).clone().detach().long()

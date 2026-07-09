@@ -47,14 +47,14 @@ The model supports both traditional learned embeddings and pre-trained ESM prote
 
 ## Results Achieved
 
-The following table shows the performance comparison between the traditional BiLSTM model and the ESM-based BiLSTM model on the test dataset:
+The following table shows the performance comparison between the traditional BiLSTM model and the ESM-based BiLSTM model on the held-out protein-level test split:
 
 | Model | Q3 Accuracy | Weighted F1 Score |
 |-------|-------------|-------------------|
-| BiLSTM | 94.72% | 94.71% |
-| ESM-BiLSTM | 89.55% | 89.53% |
+| BiLSTM | 60.40% | 60.00% |
+| ESM-BiLSTM | 72.56% | 72.00% |
 
-*Q3 Accuracy represents the overall three-state secondary structure prediction accuracy (H, E, C)*
+*Q3 Accuracy represents the overall three-state secondary structure prediction accuracy (H, E, C) on the fixed protein-level test split.*
 
 ## Future Work
 

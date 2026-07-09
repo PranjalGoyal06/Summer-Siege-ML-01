@@ -9,8 +9,10 @@ from config import config
 # for BiLSTM model
 
 class PrepareCB513(Dataset):
-    def __init__(self, csv_path = config['dataset_path'], window_size=config['bilstm']['window_size']):
+    def __init__(self, csv_path=config['dataset_path'], window_size=config['bilstm']['window_size'], protein_indices=None):
         self.df = pd.read_csv(csv_path)
+        if protein_indices is not None:
+            self.df = self.df.iloc[list(protein_indices)].reset_index(drop=True)
         self.window = window_size
         self.half = window_size // 2
 
@@ -48,11 +50,11 @@ class PrepareCB513(Dataset):
         x, y = self.samples[idx]
         return torch.tensor(x, dtype=torch.long), torch.tensor(y, dtype=torch.long)
 
+if __name__ == "__main__":
+    dataset = PrepareCB513(config['dataset_path'])
+    loader = DataLoader(dataset, batch_size=32, shuffle=True)
 
-dataset = PrepareCB513(config['dataset_path'])
-loader = DataLoader(dataset, batch_size=32, shuffle=True)
-
-for xb, yb in loader:
-    print(xb.shape)
-    print(yb.shape)
-    break
+    for xb, yb in loader:
+        print(xb.shape)
+        print(yb.shape)
+        break

@@ -1,11 +1,21 @@
 import torch
 import torch.nn as nn
-from torch.utils.data import DataLoader, random_split
+from torch.utils.data import DataLoader
 import time
 import os
+import json
 from datetime import datetime
+from pathlib import Path
 from models.bilstm import BiLSTM_Model
 from config import config
+
+
+SPLITS_PATH = Path(__file__).resolve().parent / "splits.json"
+
+
+def load_split_ids(path=SPLITS_PATH):
+    with open(path, "r") as f:
+        return json.load(f)
 
 
 def train_one_epoch(model, loader, optimizer, loss_func, device):
@@ -69,12 +79,14 @@ def main():
         num_layers=config[model_type].get('num_layers', 1)
     ).to(device)
 
-    # INITIALISING DATASET
-    dataset = Dataset()
+    splits = load_split_ids()
 
-    train_size = int(config['train_split'] * len(dataset))
-    val_size = len(dataset) - train_size
-    train_set, val_set = random_split(dataset, [train_size, val_size])
+    # INITIALISING DATASETS
+    train_set = Dataset(protein_indices=splits["train_ids"])
+    val_set = Dataset(protein_indices=splits["val_ids"])
+    test_set = Dataset(protein_indices=splits["test_ids"])
+
+    print(f"Loaded protein-level splits: train={len(train_set)}, val={len(val_set)}, test={len(test_set)}")
 
     train_loader = DataLoader(train_set, batch_size=config[model_type]['batch_size'], shuffle=True)
     val_loader = DataLoader(val_set, batch_size=config[model_type]['batch_size'])
@@ -82,7 +94,7 @@ def main():
     loss_func = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=config[model_type]['learning_rate'])
 
-    print(f"Training {model_type} with {config['train_split'] * 100}% of the dataset...")
+    print(f"Training {model_type} with protein-level splits from {SPLITS_PATH.name}...")
 
     # TRAINING LOOP
     best_val_acc = 0
